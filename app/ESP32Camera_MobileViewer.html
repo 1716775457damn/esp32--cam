@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ESP32-CAM 视频流查看器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .video-container {
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .ip-input {
+            margin: 20px 0;
+        }
+        #ip-address {
+            padding: 10px;
+            width: 200px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .status {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32-CAM 视频流查看器</h1>
+        
+        <div class="ip-input">
+            <input type="text" id="ip-address" placeholder="输入ESP32-CAM的IP地址">
+            <button onclick="connectToCamera()">连接</button>
+        </div>
+        
+        <div class="video-container">
+            <img id="video-stream" src="about:blank" alt="等待连接到摄像头...">
+        </div>
+        
+        <p class="status" id="status-text">未连接</p>
+        
+        <div class="controls">
+            <button onclick="toggleFlash('on')">开启闪光灯</button>
+            <button onclick="toggleFlash('off')">关闭闪光灯</button>
+            <button onclick="reloadStream()">刷新视频流</button>
+        </div>
+    </div>
+
+    <script>
+        let cameraIP = '';
+        
+        function connectToCamera() {
+            cameraIP = document.getElementById('ip-address').value.trim();
+            if (!cameraIP) {
+                alert('请输入ESP32-CAM的IP地址');
+                return;
+            }
+            
+            // 移除可能存在的http://前缀
+            cameraIP = cameraIP.replace(/^https?:\/\//, '');
+            
+            // 更新视频流和状态
+            document.getElementById('video-stream').src = `http://${cameraIP}`;
+            document.getElementById('status-text').textContent = `已连接到: ${cameraIP}`;
+        }
+        
+        function toggleFlash(status) {
+            if (!cameraIP) {
+                alert('请先连接到摄像头');
+                return;
+            }
+            
+            fetch(`http://${cameraIP}/flash/${status}`)
+                .then(response => {
+                    console.log(`闪光灯已${status === 'on' ? '开启' : '关闭'}`);
+                })
+                .catch(error => {
+                    console.error('控制闪光灯失败:', error);
+                    alert('控制闪光灯失败，请检查连接');
+                });
+        }
+        
+        function reloadStream() {
+            if (!cameraIP) {
+                alert('请先连接到摄像头');
+                return;
+            }
+            
+            const img = document.getElementById('video-stream');
+            img.src = `about:blank`;
+            setTimeout(() => {
+                img.src = `http://${cameraIP}?t=${new Date().getTime()}`;
+            }, 500);
+        }
+    </script>
+</body>
+</html> 

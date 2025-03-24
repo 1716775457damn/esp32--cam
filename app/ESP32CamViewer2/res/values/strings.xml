@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ESP32摄像头查看器</string>
+    <string name="title">ESP32 摄像头实时查看</string>
+    
+    <string name="connect">连接</string>
+    <string name="disconnect">断开连接</string>
+    <string name="led_on">开灯</string>
+    <string name="led_off">关灯</string>
+    <string name="restart">重启设备</string>
+    <string name="auto_connect">自动连接</string>
+    
+    <string name="status_not_connected">未连接</string>
+    <string name="status_connecting">连接中...</string>
+    <string name="status_connected">已连接到: %1$s</string>
+    <string name="status_connection_failed">连接失败: %1$s</string>
+    
+    <string name="error_no_ip">请输入ESP32设备的IP地址</string>
+    <string name="error_connect_first">请先连接到ESP32设备</string>
+    <string name="error_led_control">控制失败: %1$s</string>
+    <string name="error_streaming">流媒体错误: %1$s</string>
+    <string name="error_restart">重启命令失败: %1$s</string>
+    
+    <string name="success_led_control">%1$s已%2$s</string>
+    <string name="success_restart">设备正在重启...</string>
+    
+    <string name="led_on_status">开启</string>
+    <string name="led_off_status">关闭</string>
+    
+    <string-array name="device_types">
+        <item>ESP32-CAM</item>
+        <item>ESP32 XIAO</item>
+    </string-array>
+</resources> 
